@@ -79,8 +79,10 @@
     </Content>
     <Content Include="Layouts\AlmondLabs.CustomLookupField\css\metro-bootstrap-custom.css" />
     <Content Include="Layouts\AlmondLabs.CustomLookupField\js\jquery-2.0.3.min.js" />
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\js\jQuerySP.js" />
     <Content Include="Layouts\AlmondLabs.CustomLookupField\js\knockout-2.2.1.js" />
     <Content Include="Layouts\AlmondLabs.CustomLookupField\js\LookupDocumentUpload.js" />
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\js\LookupDocumentUploadViewModel.js" />
     <Content Include="Layouts\AlmondLabs.CustomLookupField\ko\LookupDocumentUpload.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
