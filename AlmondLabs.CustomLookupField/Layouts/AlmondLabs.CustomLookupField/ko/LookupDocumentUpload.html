@@ -17,17 +17,17 @@
             <!-- ko foreach: FilesToUpload -->
             <div data-bind="text: name" style="clear:both;"></div>
             <div class="ProgressContainer">
-				<div class="progress">
-					<div class="bar" data-bind="style: { width: (UploadProgress()*100) + '%' }"></div>
-				</div>
-			</div>
+                <div class="progress">
+                    <div class="bar" data-bind="style: { width: (UploadProgress()*100) + '%' }"></div>
+                </div>
+            </div>
             <!-- /ko -->
         </div>
 	</div>
     <!-- ko foreach: Item().Data() -->
     <div class="well well-small" style="margin:5px;">
         <!-- ko if: $root.Mode() == 'Edit' -->
-            <small class="pull-right"><a style="cursor:pointer;" data-bind="click:$root.RemoveItem">remove</a></small>
+        <small class="pull-right"><a style="cursor:pointer;" data-bind="click:$root.RemoveItem">remove</a></small>
         <!-- /ko -->
         <a style="display:block; cursor:pointer;" data-bind="text:lookupValue, click:$root.ShowTargetDocument"></a>
         <!-- ko if: TargetItem() -->
