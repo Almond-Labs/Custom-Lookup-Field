@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Field Type="LookupMulti" Mult="TRUE"
+         ID="{6F9FFA4D-60A2-4E93-86EB-1FEC85062241}"
+         Name="LookupDocumentUpload"
+         StaticName="LookupDocumentUpload"
+         DisplayName="Documents"
+         Required="FALSE"
+         List="Shared Documents"
+         Overwrite="TRUE"
+         ShowField="Title"
+         SourceID="http://schemas.microsoft.com/sharepoint/v3/fields"
+         Group="Almond Labs Columns"
+         JSLink="~site/_layouts/15/AlmondLabs.CustomLookupField/js/LookupDocumentUpload.js"></Field>
+</Elements>

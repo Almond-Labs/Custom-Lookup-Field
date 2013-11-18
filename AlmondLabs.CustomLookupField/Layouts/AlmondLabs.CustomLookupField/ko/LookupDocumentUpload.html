@@ -1,0 +1,53 @@
+﻿<div class="al" style="background-color:transparent;">
+    <!-- ko if: Mode() == 'Edit' || Mode() == 'Display' -->
+    <div class="FileUpload" data-bind="if: Mode() == 'Edit'">
+        <input type="file" data-bind="value: FileInputValue, attr: { name : FileInputId, id : FileInputId }" multiple="multiple" style="display:none;" />
+        <div style="margin:5px;">
+            <div class="pull-left">
+                <input type="text" style="margin-bottom:0px;" data-bind="value:LookupSearchValue, valueUpdate: 'afterkeydown'" placeholder="Search..." />
+                <div style="position:absolute; padding: 0 5px 5px 5px; background-color:#FFF; border-radius:0px 0px 4px 4px; border:1px solid #ccc; margin-top:-3px;" data-bind="foreach:LookupSearchResults, visible:LookupSearchResults().length > 0">
+                    <div style="cursor:pointer; padding-top:5px" data-bind="text:Title, click:$root.AddSearchItem"></div>
+                </div>
+            </div>
+            <a class="btn btn-primary pull-right" data-bind="click: IsFirefox() ? function() { $root.BrowseClick(); } : null"><label class="Link" style="margin:0px;" data-bind="attr: { for: FileInputId }">Browse</label></a>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="well well-small" style="margin:5px; background-color:#fbfbfb;" data-bind="visible: FilesToUpload() && FilesToUpload().length > 0">
+            <input type="button" class="btn btn-primary pull-right" value="Upload" data-bind="click:UploadFiles" />
+            <!-- ko foreach: FilesToUpload -->
+            <div data-bind="text: name" style="clear:both;"></div>
+            <div class="ProgressContainer">
+				<div class="progress">
+					<div class="bar" data-bind="style: { width: (UploadProgress()*100) + '%' }"></div>
+				</div>
+			</div>
+            <!-- /ko -->
+        </div>
+	</div>
+    <!-- ko foreach: Item().Data() -->
+    <div class="well well-small" style="margin:5px;">
+        <!-- ko if: $root.Mode() == 'Edit' -->
+            <small class="pull-right"><a style="cursor:pointer;" data-bind="click:$root.RemoveItem">remove</a></small>
+        <!-- /ko -->
+        <a style="display:block; cursor:pointer;" data-bind="text:lookupValue, click:$root.ShowTargetDocument"></a>
+        <!-- ko if: TargetItem() -->
+        <small class="muted">Modified by: <span data-bind="text: TargetItem().Editor"></span> at <span data-bind="text: TargetItem().Modified"></span></small>
+        <!-- /ko-->
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: Mode() == 'View' -->
+    <div>
+        <div><a style="cursor:pointer;" data-bind="click:ToggleDisplayItems"><span data-bind="text: Item().Data().length"></span> Documents</a></div>
+        <div class="DisplayItems" style="display:none;" data-bind="foreach:Item().Data()">
+            <div class="margin:5px;">
+                <small style="display:block;"><a style="cursor:pointer" data-bind="click:$root.ShowTargetDocument, text:lookupValue"></a></small>
+                <!-- ko if: TargetItem() -->
+                <small class="muted" style="margin-top:-5px; display:block;">Modified by: <span data-bind="text: TargetItem().Editor"></span> at <span data-bind="text: TargetItem().Modified"></span></small>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>

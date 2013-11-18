@@ -54,7 +54,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Elements\SiteColumns\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f005d314-80a3-4f91-ac56-bd9978dc7247}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\SiteColumns\SiteColumns.feature">
+      <FeatureId>{0af4b6bd-b6cf-4171-82cf-2eec3e68585f}</FeatureId>
+    </None>
     <None Include="key.snk" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{6346eef6-bd48-42e2-9bfe-c779ae75d14a}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{5da7a3c4-d312-4f73-b19c-98993ba69f6c}</PackageId>
     </None>
@@ -62,8 +71,17 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="Elements\SiteColumns\Elements.xml" />
+    <Content Include="Features\SiteColumns\SiteColumns.Template.xml">
+      <DependentUpon>SiteColumns.feature</DependentUpon>
+    </Content>
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\css\metro-bootstrap-custom.css" />
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\js\jquery-2.0.3.min.js" />
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\js\knockout-2.2.1.js" />
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\js\LookupDocumentUpload.js" />
+    <Content Include="Layouts\AlmondLabs.CustomLookupField\ko\LookupDocumentUpload.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

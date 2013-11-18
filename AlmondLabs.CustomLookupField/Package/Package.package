@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package dslVersion="1.0.0.0" 
-        Id="5da7a3c4-d312-4f73-b19c-98993ba69f6c" 
-        solutionId="5da7a3c4-d312-4f73-b19c-98993ba69f6c" 
-        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
-        name="AlmondLabs.CustomLookupField"
-        sharePointProductVersion="15.0">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="5da7a3c4-d312-4f73-b19c-98993ba69f6c" solutionId="5da7a3c4-d312-4f73-b19c-98993ba69f6c" resetWebServer="false" sharePointProductVersion="15.0" name="AlmondLabs.CustomLookupField" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="0af4b6bd-b6cf-4171-82cf-2eec3e68585f" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="6346eef6-bd48-42e2-9bfe-c779ae75d14a" />
+  </projectItems>
 </package>
