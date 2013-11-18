@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="5da7a3c4-d312-4f73-b19c-98993ba69f6c" 
+        solutionId="5da7a3c4-d312-4f73-b19c-98993ba69f6c" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="AlmondLabs.CustomLookupField"
+        sharePointProductVersion="15.0">
+</package>
