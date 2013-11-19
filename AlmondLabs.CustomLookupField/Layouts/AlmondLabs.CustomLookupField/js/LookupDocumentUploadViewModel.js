@@ -100,7 +100,6 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         }
     });
     self.FilesToUpload = ko.observableArray();
-
     self.LookupSearchValue = ko.observable();
     self.LookupSearchValue.subscribe(function (newValue) {
         if (newValue && newValue.length > 0) {
@@ -135,6 +134,18 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         });
     };
 
+    self.ToggleDisplayItems = function (model, event) {
+        var elem = event.originalEvent.originalTarget;
+        if (!elem)
+            elem = event.originalEvent.srcElement;
+
+        $(elem).parent().parent().children(".DisplayItems").toggle(100);
+    };
+
+    self.RemoveItem = function (item) {
+        self.Item().Data.remove(item);
+    };
+
     self.UploadFiles = function () {
         if (!window.FileReader) {
             alert("Nope");
@@ -142,23 +153,24 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         }
 
         for (var x = 0; x < self.FilesToUpload().length; x++) {
-            self.UploadFile(self.FilesToUpload()[x]);
+            self.ReadFile(self.FilesToUpload()[x]).done(self.UploadFile);
         }
     };
 
-    self.UploadFile = function (file, buffer) {
-        if (!buffer) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                self.UploadFile(file, e.target.result);
-            }
-            reader.onerror = function (e) {
-                alert(e.target.error);
-            }
-            reader.readAsArrayBuffer(file);
-            return;
+    self.ReadFile = function (file) {
+        var dfd = jQuery.Deferred();
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            dfd.resolve(file, e.target.result);
         }
+        reader.onerror = function (e) {
+            dfd.reject(e.target.error);
+        }
+        reader.readAsArrayBuffer(file);
+        return dfd;
+    };
 
+    self.UploadFile = function (file, buffer) {
         jQuery.SP.API.UploadFile(self.Item().Field.Metadata().TargetListId, file.name, buffer).progress(function (percentComplete) {
             file.UploadProgress(percentComplete);
         }).done(function (data) {
@@ -166,19 +178,6 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
             data.TargetItem = ko.observable();
             self.Item().AddItem(data);
         });
-    };
-
-    self.IsFirefox = ko.observable(typeof InstallTrigger !== 'undefined');
-
-    self.Bound = false;
-    self.Bind = function () {
-        if (!self.Bound && self.ContainerId()) {
-            self.Bound = true;
-            var elem = document.getElementById(self.ContainerId());
-            jQuery(elem).load("/_layouts/15/AlmondLabs.CustomLookupField/ko/LookupDocumentUpload.html", function () {
-                ko.applyBindings(self, elem);
-            });
-        }
     };
 
     self.Save = function () {
@@ -196,14 +195,18 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         self.Item(new LookupItemModel(ctx, self.FieldName));
     };
 
-    self.ToggleDisplayItems = function (model, event) {
-        var elem = event.originalEvent.srcElement;
-        $(elem).parent().parent().children(".DisplayItems").toggle(100);
+    self.Bound = false;
+    self.Bind = function () {
+        if (!self.Bound && self.ContainerId()) {
+            self.Bound = true;
+            var elem = document.getElementById(self.ContainerId());
+            jQuery(elem).load("/_layouts/15/AlmondLabs.CustomLookupField/ko/LookupDocumentUpload.html", function () {
+                ko.applyBindings(self, elem);
+            });
+        }
     };
 
-    self.RemoveItem = function (item) {
-        self.Item().Data.remove(item);
-    };
+    self.IsFirefox = ko.observable(typeof InstallTrigger !== 'undefined');
 
     self.toString = function () {
         return "<div id='" + self.ContainerId() + "'></div>";

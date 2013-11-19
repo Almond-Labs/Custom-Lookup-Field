@@ -19,10 +19,7 @@
             processData: false,
             headers: {
                 Accept: "application/json;odata=verbose",
-                "X-RequestDigest": digest ? digest : ""/*,
-                "Content-Length": data ?
-                    (data.byteLength ? data.byteLength : data.length)
-                    : null*/
+                "X-RequestDigest": digest ? digest : ""
             }
         };
         if (options)
@@ -110,7 +107,6 @@
         GetListDisplayForm: function (listId) {
             var dfd = $.Deferred();
             var apiUrl = $.SP.GetBaseUrl() + "/_api/lists(guid'" + listId + "')/Forms";
-            //Ajax request to get forms data for the lookup list
             jQuery.SP.get(apiUrl).done(function (data) {
                 for (var x = 0; x < data.d.results.length && data.d.results[x].FormType != 4; x++) { }
                 if (x < data.d.results.length) {

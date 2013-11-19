@@ -39,7 +39,7 @@
 
     <!-- ko if: Mode() == 'View' -->
     <div>
-        <div><a style="cursor:pointer;" data-bind="click:ToggleDisplayItems"><span data-bind="text: Item().Data().length"></span> Documents</a></div>
+        <div><a style="cursor:pointer;" data-bind="click:ToggleDisplayItems, clickBubble:false"><span data-bind="text: Item().Data().length"></span> Documents</a></div>
         <div class="DisplayItems" style="display:none;" data-bind="foreach:Item().Data()">
             <div class="margin:5px;">
                 <small style="display:block;"><a style="cursor:pointer" data-bind="click:$root.ShowTargetDocument, text:lookupValue"></a></small>
