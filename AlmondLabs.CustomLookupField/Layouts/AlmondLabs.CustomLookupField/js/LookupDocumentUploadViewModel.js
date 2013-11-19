@@ -1,45 +1,26 @@
-﻿function LookupFieldModel(ctx, fieldName) {
-    var self = this;
-    self.Metadata = ko.observable();
-
-    jQuery.SP.API.GetLookupField(ctx.listId, fieldName).done(function (data) {
-        var fields = data.d.results ? data.d.results : data.d;
-        var x; for (x = 0; x < fields.length && fields[x].InternalName != fieldName; x++) { }
-
-        if (x < fields.length) {
-            self.Metadata({
-                FieldId: fields[x].Id,
-                FieldName: fields[x].LookupField,
-                TargetWebId: fields[x].LookupWebId,
-                TargetListId: fields[x].LookupList.replace(/{|}/g, "")
-            });
-        }
-    });
-}
-
-function LookupItemModel(ctx, fieldName) {
+﻿function LookupItemModel(ctx, fieldName) {
     var self = this;
     self.OriginalItem = ctx.CurrentItem;
     self.Id = ctx.CurrentItem.ID ? ctx.CurrentItem.ID : ctx.FormContext.itemAttributes.Id;
     self.Title = ctx.CurrentItem.Title;
     self.Data = ko.observableArray([]);
     self.Data.subscribe(function (newValue) {
-        if (self.Field && self.Field.Metadata()) {
+        if (self.Field()) {
             for (var x = 0; x < newValue.length; x++) {
                 if (!newValue[x].TargetItem())
                     self.LoadTargetItem(newValue[x]);
             }
         }
     });
-    self.Field = new LookupFieldModel(ctx, fieldName);
-    self.Field.Metadata.subscribe(function (newValue) {
+    self.Field = ko.observable();
+    self.Field.subscribe(function (newValue) {
         for (var x = 0; x < self.Data().length; x++) {
             self.LoadTargetItem(self.Data()[x]);
         }
     });
 
     self.LoadTargetItem = function (item) {
-        jQuery.SP.API.GetItemModifiedEditor(self.Field.Metadata().TargetListId, item.lookupId).done(item.TargetItem);
+        jQuery.SP.API.GetItemModifiedEditor(self.Field().TargetListId, item.lookupId).done(item.TargetItem);
     };
 
     self.ReadLookup = function (fieldName) {
@@ -64,6 +45,20 @@ function LookupItemModel(ctx, fieldName) {
         item.TargetItem = ko.observable();
         self.Data.push(item)
     }
+
+    jQuery.SP.API.GetLookupField(ctx.listId, fieldName).done(function (data) {
+        var fields = data.d.results ? data.d.results : data.d;
+        var x; for (x = 0; x < fields.length && fields[x].InternalName != fieldName; x++) { }
+
+        if (x < fields.length) {
+            self.Field({
+                FieldId: fields[x].Id,
+                FieldName: fields[x].LookupField,
+                TargetWebId: fields[x].LookupWebId,
+                TargetListId: fields[x].LookupList.replace(/{|}/g, "")
+            });
+        }
+    });
 
     var data = self.ReadLookup(fieldName);
     for (var x = 0; x < data.length; x++) {
@@ -103,7 +98,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
     self.LookupSearchValue = ko.observable();
     self.LookupSearchValue.subscribe(function (newValue) {
         if (newValue && newValue.length > 0) {
-            jQuery.SP.API.QueryListByField(self.Item().Field.Metadata().TargetListId, self.Item().Field.Metadata().FieldName, newValue).done(function (results) {
+            jQuery.SP.API.QueryListByField(self.Item().Field().TargetListId, self.Item().Field().FieldName, newValue).done(function (results) {
                 self.LookupSearchResults(results);
             });
         }
@@ -114,7 +109,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
     self.LookupSearchResults = ko.observableArray();
 
     self.AddSearchItem = function (item) {
-        self.Item().AddItem({ lookupId: item.Id, lookupValue: item[self.Item().Field.Metadata().FieldName] });
+        self.Item().AddItem({ lookupId: item.Id, lookupValue: item[self.Item().Field().FieldName] });
         self.LookupSearchValue("");
     };
 
@@ -123,7 +118,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
     };
 
     self.ShowTargetDocument = function (targetItem) {
-        jQuery.SP.API.GetListDisplayForm(self.Item().Field.Metadata().TargetListId).done(function (formUrl) {
+        jQuery.SP.API.GetListDisplayForm(self.Item().Field().TargetListId).done(function (formUrl) {
             var options = {
                 title: targetItem.lookupValue, url: formUrl + "?ID=" + targetItem.lookupId, width: 500, height: 500, allowMaximize: true, showClose: true, dialogReturnValueCallback: function (dialogResult, returnValue) {
                     //SP.SOD.execute('sp.ui.dialog.js', 'SP.UI.ModalDialog.RefreshPage', SP.UI.DialogResult.OK);
@@ -171,22 +166,13 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
     };
 
     self.UploadFile = function (file, buffer) {
-        jQuery.SP.API.UploadFile(self.Item().Field.Metadata().TargetListId, file.name, buffer).progress(function (percentComplete) {
+        jQuery.SP.API.UploadFile(self.Item().Field().TargetListId, file.name, buffer).progress(function (percentComplete) {
             file.UploadProgress(percentComplete);
         }).done(function (data) {
             self.FilesToUpload.remove(file);
             data.TargetItem = ko.observable();
             self.Item().AddItem(data);
         });
-    };
-
-    self.Save = function () {
-        var ret = new Array();
-        for (var x = 0; x < self.Item().Data().length; x++) {
-            var item = self.Item().Data()[x];
-            ret[x] = item.lookupId + ";#" + item.lookupValue;
-        }
-        return ret.join(";#");
     };
 
     self.LoadContext = function (ctx) {
@@ -210,6 +196,15 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
 
     self.toString = function () {
         return "<div id='" + self.ContainerId() + "'></div>";
+    };
+
+    self.Save = function () {
+        var ret = new Array();
+        for (var x = 0; x < self.Item().Data().length; x++) {
+            var item = self.Item().Data()[x];
+            ret[x] = item.lookupId + ";#" + item.lookupValue;
+        }
+        return ret.join(";#");
     };
 
     self.LoadContext(ctx);

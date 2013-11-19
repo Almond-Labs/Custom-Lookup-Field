@@ -22,12 +22,7 @@
     };
 
     self.Save = function () {
-        var ret = new Array();
-        for (var x = 0; x < self.Item().Data().length; x++) {
-            var item = self.Item().Data()[x];
-            ret[x] = item.lookupId + ";#" + item.lookupValue;
-        }
-        return ret.join(";#");
+        return "updated field value";
     };
 
     self.LoadContext = function (ctx) {
@@ -35,7 +30,7 @@
             ctx.listName.replace(/{|}/g, "") :
             ctx.FormContext.listAttributes.Id;
         self.Context(ctx);
-        self.Item(new LookupItemModel(ctx, self.FieldName));
+        self.Item("starting field value");
     };
 
     self.toString = function () {
