@@ -4,7 +4,7 @@ jQuery.getScript("/_layouts/15/AlmondLabs.CustomLookupField/js/LookupDocumentUpl
 jQuery.ajaxSetup({ async: true });
 
 //Register view callbacks
-(function () {
+(function () { 
     var pageModels = new Array();
     var fieldName = "LookupDocumentUpload";
 
