@@ -114,7 +114,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
     };
 
     self.BrowseClick = function () {
-        $("#" + self.FileInputId()).click();
+        jQuery("#" + self.FileInputId()).click();
     };
 
     self.ShowTargetDocument = function (targetItem) {
@@ -134,7 +134,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         if (!elem)
             elem = event.originalEvent.srcElement;
 
-        $(elem).parent().parent().children(".DisplayItems").toggle(100);
+        jQuery(elem).parent().parent().children(".DisplayItems").toggle(100);
     };
 
     self.RemoveItem = function (item) {
