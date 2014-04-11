@@ -99,7 +99,7 @@
                             dfd.resolve({ lookupId: getData.d.Id, lookupValue: filename });
                         });
                     });
-                });
+                }).fail(function (data) { dfd.reject(data); });;
             });
 
             return dfd.promise();

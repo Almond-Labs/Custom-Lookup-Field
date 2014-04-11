@@ -5,7 +5,7 @@
         <div style="margin:5px;">
             <div class="pull-left">
                 <input type="text" style="margin-bottom:0px;" data-bind="value:LookupSearchValue, valueUpdate: 'afterkeydown'" placeholder="Search..." />
-                <div style="position:absolute; padding: 0 5px 5px 5px; background-color:#FFF; border-radius:0px 0px 4px 4px; border:1px solid #ccc; margin-top:-3px;" data-bind="foreach:LookupSearchResults, visible:LookupSearchResults().length > 0">
+                <div style="position:absolute; padding: 0 5px 5px 5px; background-color:#FFF; border-radius:0px 0px 4px 4px; border:1px solid #ccc; border-top:1px dotted #ddd; margin-top:-3px; width:208px;" data-bind="foreach:LookupSearchResults, visible:LookupSearchResults().length > 0">
                     <div style="cursor:pointer; padding-top:5px" data-bind="text:Title, click:$root.AddSearchItem"></div>
                 </div>
             </div>
@@ -16,11 +16,16 @@
             <input type="button" class="btn btn-primary pull-right" value="Upload" data-bind="click:UploadFiles" />
             <!-- ko foreach: FilesToUpload -->
             <div data-bind="text: name" style="clear:both;"></div>
+            <!-- ko if: !Error() -->
             <div class="ProgressContainer">
                 <div class="progress">
                     <div class="bar" data-bind="style: { width: (UploadProgress()*100) + '%' }"></div>
                 </div>
             </div>
+            <!-- /ko -->
+            <!-- ko if: Error() -->
+            <div class="alert alert-error" data-bind="text: 'Error: ' + Error()"></div>
+            <!-- /ko -->
             <!-- /ko -->
         </div>
 	</div>

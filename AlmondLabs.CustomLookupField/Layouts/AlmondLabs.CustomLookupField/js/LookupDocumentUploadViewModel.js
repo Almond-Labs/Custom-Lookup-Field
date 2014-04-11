@@ -86,11 +86,13 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
     });
     self.Mode = ko.observable("Display");
     self.FileInputValue = ko.observableArray();
+    //Document upload start
     self.FileInputValue.subscribe(function (newValue) {
         var files = document.getElementById(self.FileInputId()).files;
         self.FilesToUpload.removeAll();
         for (var x = 0; x < files.length; x++) {
             files[x].UploadProgress = ko.observable();
+            files[x].Error = ko.observable();
             self.FilesToUpload.push(files[x]);
         }
     });
@@ -141,6 +143,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         self.Item().Data.remove(item);
     };
 
+    //Document upload
     self.UploadFiles = function () {
         if (!window.FileReader) {
             alert("Nope");
@@ -152,6 +155,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         }
     };
 
+    //Document upload
     self.ReadFile = function (file) {
         var dfd = jQuery.Deferred();
         var reader = new FileReader();
@@ -165,6 +169,7 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
         return dfd;
     };
 
+    //Document upload
     self.UploadFile = function (file, buffer) {
         jQuery.SP.API.UploadFile(self.Item().Field().TargetListId, file.name, buffer).progress(function (percentComplete) {
             file.UploadProgress(percentComplete);
@@ -172,6 +177,8 @@ function LookupDocumentUploadModel(ctx, fieldName, mode) {
             self.FilesToUpload.remove(file);
             data.TargetItem = ko.observable();
             self.Item().AddItem(data);
+        }).fail(function (err) {
+            file.Error(err);
         });
     };
 
